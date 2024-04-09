@@ -14,8 +14,7 @@
 		4A4611AA2BC200760038C639 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4611A92BC200760038C639 /* SettingsViewController.swift */; };
 		4A4611B22BC21A990038C639 /* SpeedTestService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4611B12BC21A990038C639 /* SpeedTestService.swift */; };
 		4A4C68902BC36DDF00C8C430 /* ThemeStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4C688F2BC36DDF00C8C430 /* ThemeStorage.swift */; };
-		4A79E4602BC52DD700C9B29E /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4A79E45F2BC52DD700C9B29E /* Alamofire */; };
-		4A79E4622BC52DD700C9B29E /* AlamofireDynamic in Frameworks */ = {isa = PBXBuildFile; productRef = 4A79E4612BC52DD700C9B29E /* AlamofireDynamic */; };
+		4A71E9722BC56D42004942B3 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 4A71E9712BC56D42004942B3 /* Alamofire */; };
 		4A79E4642BC5332200C9B29E /* URLStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A79E4632BC5332200C9B29E /* URLStorage.swift */; };
 		4A79E4672BC5541F00C9B29E /* SwitchConditionsStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A79E4662BC5541F00C9B29E /* SwitchConditionsStorage.swift */; };
 		4A79E46A2BC5580600C9B29E /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 4A79E4692BC5580600C9B29E /* ProgressHUD */; };
@@ -47,8 +46,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A79E46A2BC5580600C9B29E /* ProgressHUD in Frameworks */,
-				4A79E4602BC52DD700C9B29E /* Alamofire in Frameworks */,
-				4A79E4622BC52DD700C9B29E /* AlamofireDynamic in Frameworks */,
+				4A71E9722BC56D42004942B3 /* Alamofire in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -132,9 +130,8 @@
 			);
 			name = SpeedTester;
 			packageProductDependencies = (
-				4A79E45F2BC52DD700C9B29E /* Alamofire */,
-				4A79E4612BC52DD700C9B29E /* AlamofireDynamic */,
 				4A79E4692BC5580600C9B29E /* ProgressHUD */,
+				4A71E9712BC56D42004942B3 /* Alamofire */,
 			);
 			productName = SpeedTester;
 			productReference = 4A4611922BC1FC7B0038C639 /* SpeedTester.app */;
@@ -165,8 +162,8 @@
 			);
 			mainGroup = 4A4611892BC1FC7B0038C639;
 			packageReferences = (
-				4A79E45E2BC52DD700C9B29E /* XCRemoteSwiftPackageReference "Alamofire" */,
 				4A79E4682BC5580600C9B29E /* XCRemoteSwiftPackageReference "ProgressHUD" */,
+				4A71E9702BC56D42004942B3 /* XCRemoteSwiftPackageReference "Alamofire" */,
 			);
 			productRefGroup = 4A4611932BC1FC7B0038C639 /* Products */;
 			projectDirPath = "";
@@ -426,7 +423,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		4A79E45E2BC52DD700C9B29E /* XCRemoteSwiftPackageReference "Alamofire" */ = {
+		4A71E9702BC56D42004942B3 /* XCRemoteSwiftPackageReference "Alamofire" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/Alamofire/Alamofire?ysclid=lus3gx2ytl294112242";
 			requirement = {
@@ -445,15 +442,10 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		4A79E45F2BC52DD700C9B29E /* Alamofire */ = {
+		4A71E9712BC56D42004942B3 /* Alamofire */ = {
 			isa = XCSwiftPackageProductDependency;
-			package = 4A79E45E2BC52DD700C9B29E /* XCRemoteSwiftPackageReference "Alamofire" */;
+			package = 4A71E9702BC56D42004942B3 /* XCRemoteSwiftPackageReference "Alamofire" */;
 			productName = Alamofire;
-		};
-		4A79E4612BC52DD700C9B29E /* AlamofireDynamic */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4A79E45E2BC52DD700C9B29E /* XCRemoteSwiftPackageReference "Alamofire" */;
-			productName = AlamofireDynamic;
 		};
 		4A79E4692BC5580600C9B29E /* ProgressHUD */ = {
 			isa = XCSwiftPackageProductDependency;
