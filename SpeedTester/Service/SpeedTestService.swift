@@ -62,7 +62,7 @@ final class NetworkServiceWithAlamofire {
       let elapsedTime = currentTime.timeIntervalSince(startTime)
       let speed = (uploadedBytes / elapsedTime) * 8 / 1_000_000
       instantSpeed(.success(speed))
-    }.responseDecodable(of: ResponseModel.self) { response in
+    }.response { response in
       if let error = response.error {
         print(error.localizedDescription)
         instantSpeed(.failure(error))

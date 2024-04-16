@@ -20,7 +20,6 @@
 		4A79E46A2BC5580600C9B29E /* ProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 4A79E4692BC5580600C9B29E /* ProgressHUD */; };
 		4A79E46C2BC5584E00C9B29E /* UIBlockingProgressHUD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A79E46B2BC5584E00C9B29E /* UIBlockingProgressHUD.swift */; };
 		4AB5B64D2BC34DF5003A5EAF /* CustomCellTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB5B64C2BC34DF5003A5EAF /* CustomCellTableViewCell.swift */; };
-		4ADBF5F52BCDE4D000AF9C6D /* ResponseModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ADBF5F42BCDE4D000AF9C6D /* ResponseModel.swift */; };
 		4AEB4AE72BC38134006F10D6 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEB4AE62BC38134006F10D6 /* CustomTextField.swift */; };
 /* End PBXBuildFile section */
 
@@ -38,7 +37,6 @@
 		4A79E4662BC5541F00C9B29E /* SwitchConditionsStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchConditionsStorage.swift; sourceTree = "<group>"; };
 		4A79E46B2BC5584E00C9B29E /* UIBlockingProgressHUD.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIBlockingProgressHUD.swift; sourceTree = "<group>"; };
 		4AB5B64C2BC34DF5003A5EAF /* CustomCellTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCellTableViewCell.swift; sourceTree = "<group>"; };
-		4ADBF5F42BCDE4D000AF9C6D /* ResponseModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ResponseModel.swift; sourceTree = "<group>"; };
 		4AEB4AE62BC38134006F10D6 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -92,7 +90,6 @@
 			isa = PBXGroup;
 			children = (
 				4A4611B12BC21A990038C639 /* SpeedTestService.swift */,
-				4ADBF5F42BCDE4D000AF9C6D /* ResponseModel.swift */,
 			);
 			path = Service;
 			sourceTree = "<group>";
@@ -202,7 +199,6 @@
 				4A79E4642BC5332200C9B29E /* URLStorage.swift in Sources */,
 				4AB5B64D2BC34DF5003A5EAF /* CustomCellTableViewCell.swift in Sources */,
 				4AEB4AE72BC38134006F10D6 /* CustomTextField.swift in Sources */,
-				4ADBF5F52BCDE4D000AF9C6D /* ResponseModel.swift in Sources */,
 				4A4C68902BC36DDF00C8C430 /* ThemeStorage.swift in Sources */,
 				4A4611B22BC21A990038C639 /* SpeedTestService.swift in Sources */,
 			);

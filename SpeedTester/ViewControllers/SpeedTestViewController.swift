@@ -201,72 +201,66 @@ final class SpeedTestViewController: UIViewController {
       }
     } completion: { speed in
       let shortValue = String(format: "%0.1f", speed)
-      DispatchQueue.main.async {
+      DispatchQueue.main.async { [ weak self] in
+        guard let self else { return }
         self.measuredSpeedValue.text = shortValue
         if self.uploadSpeedValue.isHidden && self.downloadSpeedValue.isHidden {
           UIBlockingProgressHUD.hide()
+        } else if self.uploadSpeedLabel.isHidden && !self.downloadSpeedLabel.isHidden {
+          self.measureDownloadSpeed()
+        } else {
+          self.measureUploadSpeed()
         }
       }
     }
   }
   
   private func measureUploadSpeed() {
-    UIBlockingProgressHUD.show()
-    uploadSpeedValue.text = ""
-    if !uploadSpeedLabel.isHidden {
-      speedTestService.measureCurrentandAverageSpeedForImageUpload() { [weak self] result in
-        guard let self else { return }
-        switch result {
-        case .success(let value):
-          let shortValue = String(format: "%0.1f", value)
-          DispatchQueue.main.async {
-            self.uploadSpeedValue.text = "\(shortValue)"
-          }
-        case .failure(let error):
-          print(error.localizedDescription)
+    speedTestService.measureCurrentandAverageSpeedForImageUpload() { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let value):
+        let shortValue = String(format: "%0.1f", value)
+        DispatchQueue.main.async {
+          self.uploadSpeedValue.text = "\(shortValue)"
         }
-      } completion: { [weak self] averageValue in
-        let shortValue = String(format: "%0.1f", averageValue)
-        DispatchQueue.main.async { [ weak self] in
-          guard let self else { return }
-          uploadSpeedValue.text = "\(shortValue)"
-          UIBlockingProgressHUD.hide()
-          if downloadSpeedValue.isHidden {
-            UIBlockingProgressHUD.hide()
-          }
-        }
+      case .failure(let error):
+        print(error.localizedDescription)
       }
-    } else {
-      return
+    } completion: { averageValue in
+      let shortValue = String(format: "%0.1f", averageValue)
+      DispatchQueue.main.async { [ weak self] in
+        guard let self else { return }
+        self.uploadSpeedValue.text = "\(shortValue)"
+      }
+      if self.downloadSpeedLabel.isHidden {
+        UIBlockingProgressHUD.hide()
+      } else {
+        self.measureDownloadSpeed()
+      }
     }
   }
   
   private func measureDownloadSpeed() {
-    UIBlockingProgressHUD.show()
-    downloadSpeedValue.text = ""
-    if !downloadSpeedLabel.isHidden {
-      speedTestService.measureCurrentandAverageSpeedForImageDownload { [weak self] result in
-        guard let self else { return }
-        switch result {
-        case .success(let value):
-          let shortValue = String(format: "%0.1f", value)
-          DispatchQueue.main.async {
-            self.downloadSpeedValue.text = "\(shortValue)"
-          }
-        case .failure(let error):
-          print(error.localizedDescription)
-        }
-      } completion: { [weak self] averageValue in
-        guard let self else { return }
-        let shortValue = String(format: "%0.1f", averageValue)
-        DispatchQueue.main.async { [weak self] in
-          guard let self else { return }
+    speedTestService.measureCurrentandAverageSpeedForImageDownload { [weak self] result in
+      guard let self else { return }
+      switch result {
+      case .success(let value):
+        let shortValue = String(format: "%0.1f", value)
+        DispatchQueue.main.async {
           self.downloadSpeedValue.text = "\(shortValue)"
-          UIBlockingProgressHUD.hide()
         }
+      case .failure(let error):
+        print(error.localizedDescription)
       }
-    } else {
-      return
+    } completion: { [weak self] averageValue in
+      guard let self else { return }
+      let shortValue = String(format: "%0.1f", averageValue)
+      DispatchQueue.main.async { [weak self] in
+        guard let self else { return }
+        self.downloadSpeedValue.text = "\(shortValue)"
+        UIBlockingProgressHUD.hide()
+      }
     }
   }
 }
@@ -302,12 +296,14 @@ extension SpeedTestViewController {
     }
     uploadSpeedLabel.isHidden = !SwitchConditionsStorage.shared.uploadSwitchCondition
     downloadSpeedLabel.isHidden = !SwitchConditionsStorage.shared.downloadSwitchCondition
+    uploadSpeedValue.isHidden = !SwitchConditionsStorage.shared.uploadSwitchCondition
+    downloadSpeedValue.isHidden = !SwitchConditionsStorage.shared.downloadSwitchCondition
     currentSpeedValue.text = ""
     measuredSpeedValue.text = ""
+    uploadSpeedValue.text = ""
+    downloadSpeedValue.text = ""
     
     measureSpeedOnURL()
-    measureUploadSpeed()
-    measureDownloadSpeed()
   }
 }
 
