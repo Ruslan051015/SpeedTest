@@ -37,7 +37,7 @@ final class SpeedTestViewController: UIViewController {
     label.numberOfLines = 2
     label.textColor = .customBlack
     label.text = "Upload speed,\nMbps"
-    label.isHidden = !SwitchConditionsStorage.shared.uploadSwitchCondition
+    label.isHidden = true
     
     return label
   }()
@@ -49,7 +49,7 @@ final class SpeedTestViewController: UIViewController {
     label.numberOfLines = 2
     label.textColor = .customBlack
     label.text = "Download speed,\nMbps"
-    label.isHidden = !SwitchConditionsStorage.shared.downloadSwitchCondition
+    label.isHidden = true
     
     return label
   }()
@@ -60,8 +60,7 @@ final class SpeedTestViewController: UIViewController {
     label.textAlignment = .center
     label.numberOfLines = 1
     label.textColor = .customBlack
-    label.text = "--"
-    label.isHidden = !SwitchConditionsStorage.shared.uploadSwitchCondition
+    label.isHidden = true
     
     return label
   }()
@@ -72,8 +71,7 @@ final class SpeedTestViewController: UIViewController {
     label.textAlignment = .center
     label.numberOfLines = 1
     label.textColor = .customBlack
-    label.text = "--"
-    label.isHidden = !SwitchConditionsStorage.shared.downloadSwitchCondition
+    label.isHidden = true
     
     return label
   }()
@@ -170,12 +168,105 @@ final class SpeedTestViewController: UIViewController {
     ])
   }
   
-  // НАстраиваем navBar и добавляем к нему кнопку нстроек
+  // Нaстраиваем navBar и добавляем к нему кнопку нстроек
   private func setupNavBar() {
     if navigationController?.navigationBar != nil {
       let rightButton = UIBarButtonItem(image: UIImage(systemName: "gear"), style: .plain, target: self, action: #selector(settingsButtonPressed))
       rightButton.tintColor = .customBlack
       navigationItem.rightBarButtonItem = rightButton
+    }
+  }
+  
+  private func measureSpeedOnURL() {
+    speedTestService.measureCurrentandAverageSpeedFor(url: urlString) { result in
+      switch result {
+      case .success(let speed):
+        let shortValue = String(format: "%0.1f", speed)
+        DispatchQueue.main.async {
+          self.currentSpeedValue.text = shortValue
+        }
+      case .failure(let error):
+        let alert = UIAlertController(
+          title: "Error",
+          message: "\(error.localizedDescription)",
+          preferredStyle: .alert
+        )
+        let action1 = UIAlertAction(title: "Cancel", style: .cancel)
+        let action2 = UIAlertAction(title: "Try again", style: .default) { [weak self] _ in
+          self?.testButtonPressed()
+        }
+        alert.addAction(action1)
+        alert.addAction(action2)
+        self.present(alert, animated: true)
+      }
+    } completion: { speed in
+      let shortValue = String(format: "%0.1f", speed)
+      DispatchQueue.main.async {
+        self.measuredSpeedValue.text = shortValue
+        if self.uploadSpeedValue.isHidden && self.downloadSpeedValue.isHidden {
+          UIBlockingProgressHUD.hide()
+        }
+      }
+    }
+  }
+  
+  private func measureUploadSpeed() {
+    UIBlockingProgressHUD.show()
+    uploadSpeedValue.text = ""
+    if !uploadSpeedLabel.isHidden {
+      speedTestService.measureCurrentandAverageSpeedForImageUpload() { [weak self] result in
+        guard let self else { return }
+        switch result {
+        case .success(let value):
+          let shortValue = String(format: "%0.1f", value)
+          DispatchQueue.main.async {
+            self.uploadSpeedValue.text = "\(shortValue)"
+          }
+        case .failure(let error):
+          print(error.localizedDescription)
+        }
+      } completion: { [weak self] averageValue in
+        let shortValue = String(format: "%0.1f", averageValue)
+        DispatchQueue.main.async { [ weak self] in
+          guard let self else { return }
+          uploadSpeedValue.text = "\(shortValue)"
+          UIBlockingProgressHUD.hide()
+          if downloadSpeedValue.isHidden {
+            UIBlockingProgressHUD.hide()
+          }
+        }
+      }
+    } else {
+      return
+    }
+  }
+  
+  private func measureDownloadSpeed() {
+    UIBlockingProgressHUD.show()
+    downloadSpeedValue.text = ""
+    if !downloadSpeedLabel.isHidden {
+      speedTestService.measureCurrentandAverageSpeedForImageDownload { [weak self] result in
+        guard let self else { return }
+        switch result {
+        case .success(let value):
+          let shortValue = String(format: "%0.1f", value)
+          DispatchQueue.main.async {
+            self.downloadSpeedValue.text = "\(shortValue)"
+          }
+        case .failure(let error):
+          print(error.localizedDescription)
+        }
+      } completion: { [weak self] averageValue in
+        guard let self else { return }
+        let shortValue = String(format: "%0.1f", averageValue)
+        DispatchQueue.main.async { [weak self] in
+          guard let self else { return }
+          self.downloadSpeedValue.text = "\(shortValue)"
+          UIBlockingProgressHUD.hide()
+        }
+      }
+    } else {
+      return
     }
   }
 }
@@ -209,40 +300,19 @@ extension SpeedTestViewController {
     UIBlockingProgressHUD.show()
     [currentSpeedLabel, measuredSpeedLabel].forEach { $0.isHidden = false
     }
+    uploadSpeedLabel.isHidden = !SwitchConditionsStorage.shared.uploadSwitchCondition
+    downloadSpeedLabel.isHidden = !SwitchConditionsStorage.shared.downloadSwitchCondition
     currentSpeedValue.text = ""
     measuredSpeedValue.text = ""
-    speedTestService.fetchData(url: urlString) { result in
-      switch result {
-      case .success(let speed):
-        let shortValue = String(format: "%0.1f", speed)
-        DispatchQueue.main.async {
-          self.currentSpeedValue.text = shortValue
-        }
-      case .failure(let error):
-        let alert = UIAlertController(
-          title: "Error",
-          message: "\(error.localizedDescription)",
-          preferredStyle: .alert
-        )
-        let action1 = UIAlertAction(title: "Cancel", style: .cancel)
-        let action2 = UIAlertAction(title: "Try again", style: .default) { [weak self] _ in
-          self?.testButtonPressed()
-        }
-        alert.addAction(action1)
-        alert.addAction(action2)
-        self.present(alert, animated: true)
-      }
-    } completion: { speed in
-      let shortValue = String(format: "%0.1f", speed)
-      DispatchQueue.main.async {
-        self.measuredSpeedValue.text = shortValue
-        UIBlockingProgressHUD.hide()
-      }
-    }
+    
+    measureSpeedOnURL()
+    measureUploadSpeed()
+    measureDownloadSpeed()
   }
 }
 
 // Подписка контроллера на проткол для взаимодействия классов между собой (паттерн делегат)
+// MARK: - SettingsViewControllerDelegate
 extension SpeedTestViewController: SettingsViewControllerDelegate {
   func uploadSwitchToggled(to condition: Bool) {
     uploadSpeedLabel.isHidden = !condition

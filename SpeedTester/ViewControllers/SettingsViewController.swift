@@ -35,7 +35,7 @@ final class SettingsViewController: UIViewController {
   weak var delegate: SettingsViewControllerDelegate?
   
   // MARK: - Private Properties:
-  // Обхявление переменных хранящих элементы интрейфеса а также значения свойств
+  // Объявление переменных хранящих элементы интрейфеса а также значения свойств
   private var urlString = URLStorage.shared.url {
     didSet {
       URLStorage.shared.url = urlString
